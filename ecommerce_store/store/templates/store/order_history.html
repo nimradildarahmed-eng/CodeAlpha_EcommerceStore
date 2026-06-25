@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+{% block title %}My Orders - ShopEasy{% endblock %}
+{% block content %}
+<h1>My Orders</h1>
+
+{% if orders %}
+<table class="order-table">
+    <thead>
+        <tr><th>Order #</th><th>Date</th><th>Status</th><th>Total</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at|date:"M d, Y" }}</td>
+            <td><span class="order-status">{{ order.get_status_display }}</span></td>
+            <td>${{ order.total_amount }}</td>
+            <td><a href="{% url 'order_detail' order.id %}" class="btn secondary">View</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <p>You haven't placed any orders yet.</p>
+    <a href="{% url 'product_list' %}" class="btn">Browse Products</a>
+</div>
+{% endif %}
+{% endblock %}

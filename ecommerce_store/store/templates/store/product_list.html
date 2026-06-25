@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+{% block title %}Products - ShopEasy{% endblock %}
+{% block content %}
+<h1>Our Products</h1>
+
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/220x160?text=No+Image" alt="No image">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p class="price">${{ product.price }}</p>
+        <a href="{% url 'product_detail' product.pk %}" class="btn secondary">View Details</a>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add_to_cart' product.pk %}" style="margin-top:0.5rem;">
+            {% csrf_token %}
+            <button type="submit" class="btn">Add to Cart</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No products yet. Add some from the <a href="/admin/">admin panel</a>.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'store/base.html' %}
+{% block title %}Order #{{ order.id }} - ShopEasy{% endblock %}
+{% block content %}
+<h1>Order #{{ order.id }}</h1>
+<p>Status: <span class="order-status">{{ order.get_status_display }}</span></p>
+<p>Placed on {{ order.created_at|date:"M d, Y H:i" }}</p>
+
+<table class="order-table">
+    <thead>
+        <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th></tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>${{ item.price_at_purchase }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p class="cart-total">Total: ${{ order.total_amount }}</p>
+<a href="{% url 'order_history' %}" class="btn secondary">Back to My Orders</a>
+{% endblock %}
